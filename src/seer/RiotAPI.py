@@ -36,26 +36,28 @@ class RiotAPI(object):
         self.platform = self.determine_platform(region)
         
     def determine_platform(self, region):
-        if (region == "br"):
+        if (region == self.region_BR):
             return RiotAPI.platform_BR1
-        elif (region == "eune"):
+        elif (region == self.region_EUNE):
             return RiotAPI.platform_EUN1
-        elif (region == "euw"):
+        elif (region == self.region_EUW):
             return RiotAPI.platform_EUW1
-        elif (region == "kr"):
+        elif (region == self.region_KR):
             return RiotAPI.platform_KR
-        elif (region == "lan"):
+        elif (region == self.region_LAN):
             return RiotAPI.platform_LA1
-        elif (region == "las"):
+        elif (region == self.region_LAS):
             return RiotAPI.platform_LA2
-        elif (region == "na"):
+        elif (region == self.region_NA):
             return RiotAPI.platform_NA1
-        elif (region == "oce"):
+        elif (region == self.region_OCE):
             return RiotAPI.platform_OC1
-        elif (region == "ru"):
+        elif (region == self.region_RU):
             return RiotAPI.platform_RU
-        elif (region == "tr"):
+        elif (region == self.region_TR):
             return RiotAPI.platform_TR1
+        else:
+            return False
     
     
     def lookup_summoner(self, name):
