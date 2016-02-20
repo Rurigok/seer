@@ -1,6 +1,5 @@
 
 import requests
-import Summoner
 
 class RiotAPI(object):
     """Allows for querying and receiving data from the Riot Games Developer API
@@ -63,7 +62,6 @@ class RiotAPI(object):
         self.api_key = api_key
         self.region = region
         self.url = url
-        self.summoners = []
         self.platform = self.determine_platform(region)
         
     def determine_platform(self, region):
@@ -115,18 +113,40 @@ class RiotAPI(object):
             A dict containing all summoner data
         """
         name = name.lower().replace(" ", "")
-        data = self.get("/api/lol/" + self.region 
-                                            + "/v1.4/summoner/by-name/" + name)
-        # Add basic summoner data to object
-        summoner = Summoner.Summoner(data[name]['id'], data[name]['name'], 
-                data[name]['profileIconId'], data[name]['revisionDate'], 
-                data[name]['summonerLevel'])
-        # Add ranked play data to object
-        summoner.stats = self.get("/api/lol/" + self.region + 
-                            "/v1.3/stats/by-summoner/" + str(summoner.id) + 
-                            "/summary")['playerStatSummaries']
-        self.summoners.append(summoner)
-        return summoner
+        return self.get("/api/lol/" + self.region + 
+                        "/v1.4/summoner/by-name/" + name)
+    
+    def get_champion_by_id(self, id):
+        """Gets the status of a single champion by ID
+        
+        See https://developer.riotgames.com/api/methods#!/1059/3657 for
+        a full reference.
+        
+        Args:
+            id: the ID of the champion to retrieve data for
+            
+        Returns:
+            Dict containing status data for the champion specified
+        """
+        query = "/api/lol/%s/v1.2/champion/%d" % self.region, id
+        return self.get(query)
+    
+    def get_champions(self, free_to_play=False):
+        """Gets status of all champions
+        
+        Returns the status of every champion by champion ID.
+        See https://developer.riotgames.com/api/methods#!/1059/3658 for
+        a full reference.
+        
+        Args:
+            free_to_play: Only retrieves free-to-play champions if true.
+            
+        Returns:
+            Dict containing all champion status data
+        """
+        query = "/api/lol/%s/v1.2/champion" % self.region
+        # TODO handle free_to_play parameter
+        return self.get(query)
 
     def get(self, command):
         """Executes a GET command to the API
@@ -142,7 +162,8 @@ class RiotAPI(object):
         Returns:
             The JSON response of the REST GET request
         """
-        r = requests.get(self.url + command + "?api_key=" + self.api_key)
+        args = {"api_key": self.api_key}
+        r = requests.get(self.url + command, params=args)
         if r.status_code != requests.codes.ok:
             print("HTTP ERROR: " + r.status_code + " " + r.reason)
         return r.json()
