@@ -101,13 +101,15 @@ class RiotAPI(object):
         else:
             return False
     
-    def lookup_summoner(self, name):
-        """Gets all data associated with a summoner
+    def get_summoner_by_name(self, name):
+        """Gets basic data associated with a summoner or summoners
         
-        [long, detailed description here]
+        Retrieves the basic metadata for a summoner (player) account.
+        See https://developer.riotgames.com/api/methods#!/1061/3663 for
+        a full reference.
         
         Args:
-            name: A string representing the summoner's name
+            name: A string representing the summoner's name or 
         
         Returns:
             A dict containing all summoner data
