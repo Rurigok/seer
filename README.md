@@ -7,3 +7,6 @@ past statistics of each player in the game, despite Riot Games' best effort to e
 
 ## How it works
 *seer* makes its decisions based on a neural network that is trained by a genetic algorithm, a type of evolutionary algorithm.
+
+## Project maintained by:
+**Andrew Sanetra** andrew.sanetra@gmail.com
