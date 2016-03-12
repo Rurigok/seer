@@ -7,7 +7,7 @@ Helper methods for getting helpful statistics from the API easily
     
 def get_ranked_wl_ratio(api, summoner_name):
     """
-    Gets the win/loss ratio of a summoner in a specific queue type
+    Gets the win/loss ratio of a summoner in ranked dynamic queue
     
     Args:
         summoner_name: The name of the summoner
@@ -30,4 +30,3 @@ def get_ranked_wl_ratio(api, summoner_name):
     wins = stats['wins']
     losses = stats['losses']
     return float(wins) / float(losses)
-
