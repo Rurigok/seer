@@ -144,6 +144,16 @@ class RiotAPI(object):
         query = "/api/lol/%s/v1.2/champion/%d" % self.region, id
         return self.get(query)
     
+    def get_current_game(self, summoner_id):
+        query = '/observer-mode/rest/consumer/getSpectatorGameInfo/%s/%d' \
+                % (self.platform, int(summoner_id))
+        return self.get(query)
+    
+    def get_recent_games(self, summoner_id):
+        query = '/api/lol/%s/v1.3/game/by-summoner/%d/recent' \
+                % (self.region, int(summoner_id))
+        return self.get(query)
+    
     def get_static_champion(self, id, additional_data="all"):
         """Gets static champion information by champion ID
         
@@ -244,6 +254,8 @@ class RiotAPI(object):
         Returns:
             The JSON response of the REST GET request
         """
+        if not type(command) is str:
+            raise TypeError('command must be of type str')
         args["api_key"] = self.api_key
         r = requests.get(self.url + command, params=args)
         if r.status_code != requests.codes.ok:
