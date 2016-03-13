@@ -1,4 +1,3 @@
-
 import requests
 
 class RiotAPI(object):
@@ -48,11 +47,26 @@ class RiotAPI(object):
     PLATFORM_RU = "RU"
     PLATFORM_TR1 = "TR1"
     
-    # Queue type constants
+    # Queue type constants (for stats summary)
     ARAM = 'AramUnranked5x5'
     NORMAL_5V5 = 'Unranked'
     NORMAL_3V3 = 'Unranked3x3'
     RANKED_5V5_DYNAMIC = 'RankedSolo5x5'
+    
+    # Queue types for matchlist
+    RANKED_5V5_DYNAMIC_M = 'TEAM_BUILDER_DRAFT_RANKED_5x5'
+    
+    # Lane constants
+    TOP = 'TOP'
+    JUNGLE = 'JUNGLE'
+    MIDDLE = 'MIDDLE'
+    BOTTOM = 'BOTTOM'
+    
+    # Role constants
+    AD_CARRY = 'DUO_CARRY'
+    SUPPORT = 'DUO_SUPPORT'
+    SOLO = 'SOLO'
+    JUNGLER = 'NONE'
 
     def __init__(self, api_key, region, url="https://na.api.pvp.net"):
         """Inits a new RiotAPI object with the given values
@@ -154,6 +168,11 @@ class RiotAPI(object):
                 % (self.region, int(summoner_id))
         return self.get(query)
     
+    def get_match_list(self, summoner_id):
+        query = '/api/lol/%s/v2.2/matchlist/by-summoner/%d' \
+                % (self.region, int(summoner_id))
+        return self.get(query)
+    
     def get_static_champion(self, id, additional_data="all"):
         """Gets static champion information by champion ID
         
@@ -238,6 +257,7 @@ class RiotAPI(object):
         
         """
         summoner = self.get_summoner_by_name(name)
+        name = name.replace(' ', '')
         return summoner[name.lower()]["id"]
 
     def get(self, command, args={}):
